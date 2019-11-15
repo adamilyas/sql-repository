@@ -33,10 +33,13 @@ def process_parser(parser):
         
 def generate_statement(field_names, table, values):
 
-    field_names = tuple(field_names)
+    col_name_string = str(field_names[0])
+    for col_name in field_names[1:]:
+        col_name_string += ", " + col_name
+        
     values = tuple(values)
 
-    statement = "INSERT INTO %s %s VALUES %s;\n" % (table, field_names, values)
+    statement = "INSERT INTO %s (%s) VALUES %s;\n" % (table, col_name_string, values)
     return statement
 
 def load_data_from_csv(infile, outfile, table, verbose=False):
