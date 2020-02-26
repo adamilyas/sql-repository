@@ -5,6 +5,8 @@ import json
 from os import path
 
 """
+TODO: THIS SCRIPT IS STILL IN DEV.
+
 Run this script via command line, cd to directory where file is and run
 $ python ./generate_sql_script.py -i INPUT_FILE_NAME.csv -t table_name
 """

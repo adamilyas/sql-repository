@@ -19,6 +19,32 @@ DROP FUNCTION IF EXISTS add_account_input_json_return_json;
 -- ORIGINAL QUERY
 INSERT INTO ACCOUNT (username, password, email) VALUES ('bob612312', '1231234', 'bo12312b5@email') RETURNING ACCOUNT;
 
+-- USING plpgsql
+CREATE OR REPLACE FUNCTION insert_to_account(input_json json)
+RETURNS TABLE (res json)
+AS $$
+	DECLARE
+		input_username text := (input_json->>'username')::text;
+		input_password text := (input_json->>'password')::text;
+		input_email text := (input_json->>'email')::text;
+
+	BEGIN 
+	RETURN QUERY
+	
+		INSERT INTO ACCOUNT (username, password, email) VALUES 
+		(input_username, input_password, input_email)
+		RETURNING ROW_TO_JSON(account);
+	END;
+$$ LANGUAGE plpgsql;
+
+select insert_to_account('{"username": "adam", "password": "pass12", "email":"adam_new_email"}'::json);
+
+
+
+
+-- USING LANGUAGE sql
+-- Note: https://stackoverflow.com/questions/24755468/difference-between-language-sql-and-language-plpgsql-in-postgresql-functions
+
 -- Function and return inserted
 CREATE OR REPLACE FUNCTION add_account(_username varchar, _password varchar, _email varchar) RETURNS ACCOUNT AS $$
     INSERT INTO ACCOUNT (username, password, email) VALUES (_username, _password, _email)
