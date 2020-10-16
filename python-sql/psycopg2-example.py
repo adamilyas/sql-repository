@@ -1,10 +1,10 @@
 import psycopg2
 
 USER = "postgres"
-PASSWORD = "password"
+PASSWORD = "232615"
 LOCALHOST = "127.0.0.1"
 PORT = "5432"
-DATABASE = "users"
+DATABASE = "learn"
 
 def test_connection():
     try:
