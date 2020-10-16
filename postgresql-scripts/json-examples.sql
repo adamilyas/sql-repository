@@ -1,3 +1,5 @@
+-- RETURNING TABLE AS JSON ARRAY
+
 CREATE OR REPLACE FUNCTION iterate_over_json_array_example(input_json JSON)
 	RETURNS VOID
 	LANGUAGE plpgsql
@@ -10,12 +12,14 @@ DECLARE
 	each_int INT;
 BEGIN
 	RAISE NOTICE 'list_json: %', list_json;
-	FOR each_json IN SELECT * FROM json_array_elements(list_json)
+	FOR each_json IN 
+		(SELECT * FROM json_array_elements(list_json))
 	LOOP
 		RAISE NOTICE 'Element: %', each_json->>'name';
 	END LOOP;
 	
-	FOR each_int IN SELECT * FROM json_array_elements(list_int)
+	FOR each_int IN 
+		(SELECT * FROM json_array_elements(list_int))
 	LOOP
 		RAISE NOTICE 'Int Element: %', each_int;
 	END LOOP;
@@ -23,5 +27,5 @@ END;
 $function$;
 
 select iterate_over_json_array_example(
-	'{"list": [{"name": "adam"} , {"name": "yufang"}], "list_int": [1,2,3]}');
+	'{"list": [{"name": "adam"} , {"name": "another name"}], "list_int": [1,2,3]}');
 
